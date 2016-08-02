@@ -1,5 +1,6 @@
 # JMandelbrot
-A simple mandelbrot visualizer that zooms written in Java. Has a lot of bugs and the code isn't fantastic
+A simple mandelbrot visualizer that zooms written in Java. Has a lot of bugs and the code isn't fantastic.
+
 If you want to help or have any comments, submit and issue/pull here or email calix1999@gmail.com
 
 ## Bugs
