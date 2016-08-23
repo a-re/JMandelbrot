@@ -1,5 +1,6 @@
 package co.restifo.mandelbrot;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,6 +20,7 @@ public class MandelFrame extends JPanel
 	int MAX_ITERS;
 	double scale = 1.0;
 	private static final long serialVersionUID = 1L;
+	private final double LOG2 = log2(2.0);
 	public MandelFrame(int x, int y, int MAX_ITERS)
 	{
 		setPreferredSize(new Dimension(x, y));
@@ -56,34 +58,48 @@ public class MandelFrame extends JPanel
 		}
 		g.drawImage(image, 0, 0, null);
 		
-		scale += Math.pow(1.02, i);
+		scale += Math.pow(1.1, i);
 		i++;
 	}
 	
 	public int calculate(double sX, double sY, int iters)
 	{
-		double xC = 0;
-		double yC = 0;
-		int i = 0;
-		while (xC * xC + yC * yC < 4 && i < iters)
+		double xC = 0.0;
+		double yC = 0.0;
+		int it = 0;
+		final int BAILOUT = 4;
+		while ((xC * xC + yC * yC < BAILOUT) && (it < iters))
 		{
 			double xT = xC * xC - yC * yC + sX;
 			yC = 2 * xC * yC + sY;
 			xC = xT;
-			i++;
+			it++;
 		}
-		return i;
+		
+		if (it < iters)
+		{
+			int log_i = (int) (log2(xC * xC + yC * yC) / 2.0);
+			int subI = (int) (log2(log_i / LOG2) / LOG2);
+			it = it + 1 - subI;
+		}
+		return it == iters ? 1 : it;
+	}
+	
+	private double log2(double x)
+	{
+		return Math.log(x) / Math.log(2.0);
 	}
 	
 	private void generatePalette()
 	{
-		palette = new int[MAX_ITERS + 1];
-		for(int n = 0; n < palette.length; n++) 
+		palette = new int[MAX_ITERS + 2];
+		palette[0] = Color.black.getRGB();
+		for(int n = 1; n < palette.length; n++) 
 		{
 			// use sine to model a "rainbow wave" and use two different phases to offset the initial color (math.pi & math.pi/2)
-	        palette[n] = ((int)(Math.sin(n) * 127 + 128) << 16 ) | 
-	        		     ((int)(Math.sin(n + Math.PI / 2) * 127 + 128) << 8) | 
-	        			 ((int)(Math.sin(n + Math.PI) * 127 + 128)) | 0xFF000000; //0xFF000000 is 100% alpha
+	        palette[n] = (int)(Math.sin(n) * 127 + 128) << 16 | 
+	        		     (int)(Math.sin(n + Math.PI / 2) * 127 + 128) << 8 | 
+	        			 (int)(Math.sin(n + Math.PI) * 127 + 128) | 0xFF000000; //0xFF000000 is 100% alpha
 	    }
 	}
 }
