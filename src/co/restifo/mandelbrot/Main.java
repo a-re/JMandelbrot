@@ -5,8 +5,8 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 public class Main {
-	static int x = 600;
-	static int y = 600;
+	static int x = 400; //600
+	static int y = 400; //600
 	static int MAX_ITERS = 100000;
 	public static void main(String[] args) throws InterruptedException
 	{
