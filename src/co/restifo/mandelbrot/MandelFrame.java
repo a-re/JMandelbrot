@@ -24,6 +24,8 @@ public class MandelFrame extends JPanel {
 	private int i = 1;
 	private int MAX_ITERS;
 	private volatile Apfloat scale = Apfloat.ONE;
+	private volatile int movTime = 0;
+	private final int TIME_PER_FRAME = 1000 / 25; // 25 frames per second
 	private final Apfloat BD_BAILOUT = new Apfloat(4.0);
 	private final Apfloat BD_TWO = new Apfloat(2.0);
 	private final Apfloat BD_SCALE_CONST = new Apfloat(1.5);
